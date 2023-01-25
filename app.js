@@ -2,10 +2,18 @@ const express = require('express');
 const app = express();
 const mongoose = require('mongoose');
 
-const sauce = require('./models/sauce');
+const path = require('path'); // permet d'acceder au chemin du systeme fichiers
+const helmet = require('helmet'); //securise l'application express
+
+const dotenv = require('dotenv'); // charge  les variables d'environnement notamment caché les mots de passes mongoDb
+dotenv.config();
+
+const sauceRoutes = require('./routes/sauce');
+const userRoutes = require('./routes/user');
+
 
 mongoose.connect(
-    'mongodb+srv://Fred:dfZLX6Uo2thKJS5M@cluster0.xwqqeka.mongodb.net/?retryWrites=true&w=majority',
+    process.env.MONGO_CONNECT,
     {
         useNewUrlParser: true,
         useUnifiedTopology: true
@@ -21,26 +29,9 @@ app.use((req, res, next) => {
 });
 
 app.use(express.json());
-
-
-
-app.use((req, res, next) => {
-    console.log('Requête reçue !');
-    next();
-});
-
-app.use((req, res, next) => {
-    res.status(201);
-    next();
-});
-
-app.use((req, res, next) => {
-    res.json({ message: 'Votre requête a bien été reçue !' });
-    next();
-});
-
-app.use((req, res, next) => {
-    console.log('Réponse envoyée avec succès !');
-});
-
+app.use(helmet());
+app.use(helmet.crossOriginResourcePolicy({ policy: "cross-origin" }));
+app.use('/api/sauces', sauceRoutes);
+app.use('/api/auth', userRoutes);
+app.use('/images', express.static(path.join(__dirname, 'images')));
 module.exports = app;
