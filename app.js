@@ -3,14 +3,13 @@ const app = express();
 const mongoose = require('mongoose');
 
 const path = require('path'); // permet d'acceder au chemin du systeme fichiers
-const helmet = require('helmet'); //securise l'application express
+const helmet = require('helmet'); //securise l'application express des failles d 'entetes
 
 const dotenv = require('dotenv'); // charge  les variables d'environnement notamment caché les mots de passes mongoDb
 dotenv.config();
 
 const sauceRoutes = require('./routes/sauce');
 const userRoutes = require('./routes/user');
-
 
 mongoose.connect(
     process.env.MONGO_CONNECT,

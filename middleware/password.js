@@ -17,6 +17,6 @@ module.exports = (req, res, next) => {
     if (schema.validate(req.body.password)) {
         next();
     } else {
-        return res.status(400).json({ error: `Le mot de passe n'est pas assez fort : ${schema.validate(req.body.password, { list: true })}` });
+        return res.status(400).json({ error: `Le mot de passe n'est pas assez fort :il doit contenir au moins 8 caractères,une majuscule, 2 chiffres, pas d'espaces` });
     }
 };
